@@ -74,7 +74,10 @@ if __name__ == "__main__":
     print(f"\nWe know a = {a}, b = {b}.")
     print(f"We want to use them to factor n = {n}.")
     status, factor = factoring(n, a, b)
-    print("\n")
-    if factor == n:
-        print("TRIVIAL FACTOR. Found factor equals n.")
-        print("\n")
+
+    if status == "SUCCESS":
+        other_factor = n // factor
+        print(f"\nIt seems that {factor} * {other_factor} = {n}")
+        
+        if factor == n:
+            print("TRIVIAL FACTOR. Found factor equals n.")
