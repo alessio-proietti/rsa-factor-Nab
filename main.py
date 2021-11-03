@@ -3,6 +3,9 @@
 import random
 import libnum
 
+from Crypto.Util.number import getPrime
+from Crypto.Random import get_random_bytes
+
 
 def square_and_multiply(x, c, n):
     c = bin(c)
@@ -65,11 +68,39 @@ def factoring(n, a, b):
         return "SUCCESS", x
 
 
+def get_rsa_params(primebits):
+    p = getPrime(primebits, randfunc=get_random_bytes)
+    q = getPrime(primebits, randfunc=get_random_bytes)
+
+    while(q == p):
+        q = getPrime(primebits, randfunc=get_random_bytes)
+
+    n = p*q
+    phi = (p-1)*(q-1)
+
+    b = random.randint(1, phi)
+
+    while(libnum.gcd(b, phi) != 1):
+        b = random.randint(1, phi)
+
+    a = libnum.invmod(b, phi)
+
+    print(f"We generate two prime p = {p}, q = {q}.")
+    print(f"We then calculate Phi(n)={phi}, b random invertible in Z_Phi(n), a inverse of b.")
+    print(f"\nNow imagine we don't know p, q and we somehow obtain a, b.")
+
+    return n, a, b
+
+
 if __name__ == "__main__":
 
-    n = 89855713
-    a = 82330933
-    b = 34986517
+    primebits = 16
+
+    n, a, b = get_rsa_params(primebits)
+
+    #n = 89855713
+    #a = 82330933
+    #b = 34986517
 
     print(f"\nWe know a = {a}, b = {b}.")
     print(f"We want to use them to factor n = {n}.")
@@ -78,6 +109,6 @@ if __name__ == "__main__":
     if status == "SUCCESS":
         other_factor = n // factor
         print(f"\nIt seems that {factor} * {other_factor} = {n}")
-        
+
         if factor == n:
             print("TRIVIAL FACTOR. Found factor equals n.")
