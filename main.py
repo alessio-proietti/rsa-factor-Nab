@@ -44,8 +44,6 @@ def factoring(n, a, b):
         print(f"SUCCESS, factor = {x}.")
         return "SUCCESS", x
 
-    #v = (w ** r) % n
-
     v = square_and_multiply(w, r, n)
 
     if (v % n == 1):
@@ -73,8 +71,8 @@ if __name__ == "__main__":
     a = 82330933
     b = 34986517
 
-    print(
-        f"\nWe know a = {a}, b = {b}. We want to use them to factor n = {n}.")
+    print(f"\nWe know a = {a}, b = {b}.")
+    print(f"We want to use them to factor n = {n}.")
     status, factor = factoring(n, a, b)
     print("\n")
     if factor == n:
